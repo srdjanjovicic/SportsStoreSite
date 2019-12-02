@@ -57,7 +57,7 @@ namespace SportsStore.Domain.Concrete
 				foreach (var line in cart.Lines)
 				{
 					var subtotal = line.Product.Price * line.Quantity;
-					body.AppendFormat("{0} x {1} (subtota: {2:c}", line.Quantity,
+					body.AppendFormat("{0} x {1} (subtotal: {2:c}", line.Quantity,
 						line.Product.Name,
 						subtotal);
 				}
@@ -74,7 +74,7 @@ namespace SportsStore.Domain.Concrete
 					.AppendLine(shippingDetails.Country)
 					.AppendLine(shippingDetails.Zip ?? "")
 					.AppendLine("---")
-					.AppendFormat("Gift Wrap: {}",
+					.AppendFormat("Gift Wrap: {0}",
 						shippingDetails.GiftWrap ? "Yes" : "No");
 
 				MailMessage message = new MailMessage(emailSettings.MailFromAdress, emailSettings.MailToAddress, "New order submitted!", body.ToString());
