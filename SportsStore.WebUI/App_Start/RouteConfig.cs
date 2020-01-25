@@ -9,33 +9,36 @@ namespace SportsStore.WebUI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.MapRoute(
-				null,
-				"",
-				new { Controller = "Product", Action = "List", category = (string)null, page = 1 }
-			);
+			//routes.MapRoute(
+			//	null,
+			//	"",
+			//	new { Controller = "Product", Action = "List", category = (string)null, page = 1 }
+			//);
 
-			routes.MapRoute(
-				null,
-				"Page{page}",
-				new { Controller = "Product", Action = "List", category = (string)null },
-				new { page = @"\d+"}
-			);
-			
-			routes.MapRoute(
-				null,
-				"{category}",
-				new { Controller = "Product", Action = "List", page = 1 }
-			);
-			
-			routes.MapRoute(
-				null,
-				"{category}/Page{page}",
-				new { Controller = "Product", Action = "List" },
-				new { page = @"\d+" }
-			);
+			//routes.MapRoute(
+			//	null,
+			//	"Page{page}",
+			//	new { Controller = "Product", Action = "List", category = (string)null },
+			//	new { page = @"\d+"}
+			//);
 
-			routes.MapRoute(null, "{controller}/{action}");
+			//routes.MapRoute(
+			//	null,
+			//	"{category}",
+			//	new { Controller = "Product", Action = "List", page = 1 }
+			//);
+
+			//routes.MapRoute(
+			//	null,
+			//	"{category}/Page{page}",
+			//	new { Controller = "Product", Action = "List" },
+			//	new { page = @"\d+" }
+			//);
+
+			//routes.MapRoute(null, "{controller}/{action}");
+
+			routes.MapRoute("", "{controller}/{action}/{id}",
+				new { controller = "UrlRouting", action = "Index", id = UrlParameter.Optional });
         }
     }
 }

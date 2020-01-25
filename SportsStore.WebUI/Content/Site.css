@@ -26,3 +26,17 @@ body {
 .checkout-button {
 	margin-left: 10px;
 }
+
+.field-validation-error {
+	color: #ea8686;
+}
+.field-validation-valid{ display: none; }
+.input-validation-error {
+	border: 1px solid #ea8686;
+	background-color: #ea8686;
+}
+.validation-summary-errors {
+	font-weight: bold;
+	color: #ea8686;
+}
+.validation-summary-valid { display: none; }
