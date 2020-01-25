@@ -1,13 +1,12 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SportsStore.Domain.Entities;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SportsStore.Domain.Abstract;
+using SportsStore.Domain.Entities;
 using SportsStore.WebUI.Controllers;
+using SportsStore.WebUI.Models;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Web.Mvc;
 
 namespace SportsStore.UnitTests
 {
@@ -126,10 +125,10 @@ namespace SportsStore.UnitTests
 			mock.Setup(m => m.Products).Returns(new Product[]
 			{
 				new Product {ProductID = 1, Name = "P1", Category = "Apples"}
-			});
+			}.AsQueryable());
 
 			Cart cart = new Cart();
-			CartController controller = new CartController(mock.Object);
+			CartController controller = new CartController(mock.Object, null);
 
 			// Act
 			controller.AddToCart(cart, 1, null);
@@ -139,6 +138,41 @@ namespace SportsStore.UnitTests
 			Assert.AreEqual(1, cart.Lines.First().Product.ProductID);
 		}
 
+		[TestMethod]
+		public void Adding_Product_T0_Cart_Goes_To_Cart_Screen()
+		{
+			// Arrange
+			Mock<IProductRepository> mock = new Mock<IProductRepository>();
+			mock.Setup(m => m.Products).Returns(new Product[]
+			{
+				new Product {ProductID = 1, Name = "P1", Category = "Apples"}
+			}.AsQueryable());
 
+			Cart cart = new Cart();
+			CartController controller = new CartController(mock.Object, null);
+
+			// Act
+			RedirectToRouteResult result = controller.AddToCart(cart, 2, "url");
+
+			// Assert
+			Assert.AreEqual(result.RouteValues["action"], "Index");
+			Assert.AreEqual(result.RouteValues["returnUrl"], "url");
+		}
+
+		[TestMethod]
+		public void Can_View_Cart_Contents()
+		{
+			// Arrange
+			Cart cart = new Cart();
+
+			CartController controller = new CartController(null, null);
+
+			// Act
+			CartIndexViewModel result = (CartIndexViewModel)controller.Index(cart, "url").ViewData.Model;
+
+			// Assert
+			Assert.AreSame(cart, result.Cart);
+			Assert.AreEqual("url", result.ReturnUrl);
+		}
 	}
 }

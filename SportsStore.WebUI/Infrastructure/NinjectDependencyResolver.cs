@@ -3,8 +3,11 @@ using Ninject;
 using SportsStore.Domain.Abstract;
 using SportsStore.Domain.Concrete;
 using SportsStore.Domain.Entities;
+using SportsStore.WebUI.Infrastructure.Abstract;
+using SportsStore.WebUI.Infrastructure.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -34,6 +37,15 @@ namespace SportsStore.WebUI.Infrastructure
 		private void AddBindings()
 		{
 			_kernel.Bind<IProductRepository>().To<EFProductRepository>();
+			EmailSettings emailSettings = new EmailSettings
+			{
+				WtireAsFile = bool.Parse(ConfigurationManager.AppSettings["Email.WriteAsFile"] ?? "false")
+			};
+
+			_kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>()
+				.WithConstructorArgument("settings", emailSettings);
+
+			_kernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
 		}
 	}
 }
